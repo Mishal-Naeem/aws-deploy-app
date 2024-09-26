@@ -58,6 +58,12 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
+  gem 'capistrano', '~> 3.16'
+  gem 'capistrano-rails', '~> 1.6'
+  gem 'capistrano-rvm', '~> 0.1.2'  # Or 'capistrano-rvm' if you're using RVM
+  gem 'capistrano-bundler', '~> 2.0'
+  gem 'capistrano3-puma', '~> 5.0'  # If you're using Puma
+
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
@@ -72,7 +78,4 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
-gem 'capistrano', require: false
-gem 'capistrano-rails', require: false
-gem 'capistrano-bundler', require: false
-gem 'capistrano-rbenv', require: false  # Or 'capistrano-rvm' if using RVM
+
