@@ -72,3 +72,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
+gem 'capistrano', require: false
+gem 'capistrano-rails', require: false
+gem 'capistrano-bundler', require: false
+gem 'capistrano-rbenv', require: false  # Or 'capistrano-rvm' if using RVM
