@@ -25,6 +25,23 @@ set :keep_releases, 5
 # end
 
 namespace :deploy do
+  desc 'Run assets:precompile'
+  task :assets_precompile do
+    on roles(:web) do
+      within release_path do
+        # Ensure the SECRET_KEY_BASE is set from credentials or directly
+        secret_key_base = fetch(:secret_key_base)
+
+        # Run the assets:precompile command with the SECRET_KEY_BASE
+        within release_path do
+          execute :env, "SECRET_KEY_BASE=1", "bundle exec rake assets:precompile"
+        end
+      end
+    end
+  end
+
+  before 'deploy:updated', 'deploy:assets_precompile'
+
   desc "Make sure local git is in sync with remote."
   task :check_revision do
     on roles(:app) do
