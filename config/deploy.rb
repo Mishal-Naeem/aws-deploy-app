@@ -4,6 +4,7 @@ lock "~> 3.19.1"
 set :application, "react-rails-crud-app"
 set :repo_url, "git@github.com:Mishal-Naeem/aws-deploy-app.git"
 set :deploy_to, "/var/www/#{fetch(:application)}"
+set :rails_env, 'production'
 
 set :branch, :master 
 set :pty, true
@@ -23,6 +24,14 @@ namespace :deploy do
         unless test("[ -f #{shared_path}/config/master.key ]")
           upload! 'config/master.key', "#{shared_path}/config/master.key"
         end
+      end
+    end
+  end
+
+  namespace :set_master_key do
+    before 'deploy:assets:precompile', :set_master_key_env do
+      on roles(:app) do
+        execute "export RAILS_MASTER_KEY=$(cat #{shared_path}/config/master.key)"
       end
     end
   end
