@@ -11,16 +11,51 @@ set :linked_files, %w{config/database.yml config/master.key} #if rails 5.2 & abo
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
 set :keep_releases, 5
 
+# namespace :deploy do
+#   desc 'Upload database.yml and master.key'
+#   task :upload_config do
+#     on roles(:app) do
+#       upload! 'config/database.yml', "#{shared_path}/config/database.yml"
+#       upload! 'config/master.key', "#{shared_path}/config/master.key" # If you need the master.key as well
+#     end
+#   end
+
+#   before 'deploy:check:linked_files', 'deploy:upload_config'
+#   after :finishing, 'deploy:cleanup'
+# end
+
 namespace :deploy do
-  desc 'Upload database.yml and master.key'
-  task :upload_config do
+  desc "Make sure local git is in sync with remote."
+  task :check_revision do
     on roles(:app) do
-      upload! 'config/database.yml', "#{shared_path}/config/database.yml"
+      unless `git rev-parse HEAD` == `git rev-parse origin/master`
+        puts "WARNING: HEAD is not the same as origin/master"
+        puts "Run `git push` to sync changes."
+        exit
+      end
+      execute :gem, "install bundler -v '2.5.14' || true"
     end
   end
 
-  before 'deploy:check:linked_files', 'deploy:upload_config'
-  after :finishing, 'deploy:cleanup'
+  desc 'Initial Deploy'
+  task :initial do
+    on roles(:app) do
+      before 'deploy:restart', 'puma:start'
+      invoke 'deploy'
+    end
+  end
+
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      invoke 'puma:restart'
+    end
+  end
+
+  before :starting,     :check_revision
+  after  :finishing,    :compile_assets
+  after  :finishing,    :cleanup
+  after  :finishing,    :restart
 end
 
 # Default branch is :master
