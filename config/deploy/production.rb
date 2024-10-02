@@ -64,6 +64,6 @@ server '98.83.223.51', user: 'deploy', roles: %w{app db web}
 
 set :ssh_options, {
   keys: %w(/home/ads/Downloads/connecthub.pem),
-  forward_agent: false,
+  forward_agent: true,
   auth_methods: %w(publickey)
 }
