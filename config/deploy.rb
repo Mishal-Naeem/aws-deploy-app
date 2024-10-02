@@ -128,6 +128,18 @@ set :keep_releases, 5
 set :secret_key_base, ENV['SECRET_KEY_BASE'] || 1
 
 namespace :deploy do
+  desc "Make sure local git is in sync with remote."
+  task :check_revision do
+    on roles(:app) do
+      unless `git rev-parse HEAD` == `git rev-parse origin/master`
+        puts "WARNING: HEAD is not the same as origin/master"
+        puts "Run `git push` to sync changes."
+        exit
+      end
+      execute :gem, "install bundler -v '2.5.14' || true"
+    end
+  end
+
   desc 'Upload database.yml and master.key'
   task :upload_config do
     on roles(:app) do
