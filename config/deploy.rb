@@ -12,7 +12,6 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 # Number of releases to keep on the server
 set :keep_releases, 5
-
 # Ruby version
 set :rbenv_ruby, '3.1.0' # Adjust according to your setup
 
