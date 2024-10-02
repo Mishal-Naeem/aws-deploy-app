@@ -21,5 +21,9 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: my_production_db
+  pool: 5
+  host: localhost  # Since the database is on the same EC2 instance
+  port: 5432       # Default PostgreSQL port

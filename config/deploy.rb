@@ -12,6 +12,14 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 set :keep_releases, 5
 
 namespace :deploy do
+  desc 'Upload database.yml and master.key'
+  task :upload_config do
+    on roles(:app) do
+      upload! 'config/database.yml', "#{shared_path}/config/database.yml"
+    end
+  end
+
+  before 'deploy:check:linked_files', 'deploy:upload_config'
   after :finishing, 'deploy:cleanup'
 end
 

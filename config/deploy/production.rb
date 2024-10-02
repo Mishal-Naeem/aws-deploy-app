@@ -60,7 +60,7 @@
 #     # password: "please use keys"
 #   }
 
-server '8.83.223.51', user: 'ec2-user', roles: %w{app db web}
+server '98.83.223.51', user: 'deploy', roles: %w{app db web}
 
 set :ssh_options, {
   keys: %w(/home/ads/Downloads/connecthub.pem),
