@@ -24,6 +24,8 @@ production:
   adapter: postgresql
   encoding: unicode
   database: my_production_db
+  username: 'deploy'
+  password: '1234567'
   pool: 5
   host: localhost  # Since the database is on the same EC2 instance
   port: 5432       # Default PostgreSQL port
