@@ -3,43 +3,17 @@ lock "~> 3.19.1"
 
 set :application, "react-rails-crud-app"
 set :repo_url, "git@github.com:Mishal-Naeem/aws-deploy-app.git"
-set :deploy_to, "/var/www/#{fetch(:application)}"
-set :rails_env, 'production'
 
-set :branch, :master 
-set :pty, true
-set :linked_files, %w{config/database.yml config/master.key}
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "public/uploads"
+set :deploy_to, '/home/deploy/myapp'
+set :puma_bind, 'tcp://0.0.0.0:9292'
 
-# Number of releases to keep on the server
+append :linked_files, 'config/database.yml', 'config/master.key'
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
+
 set :keep_releases, 5
-# Ruby version
-set :rbenv_ruby, '3.1.0' # Adjust according to your setup
 
-# Nginx and Puma tasks
 namespace :deploy do
-  namespace :check do
-    before :linked_files, :set_master_key do
-      on roles(:app), in: :sequence, wait: 10 do
-        unless test("[ -f #{shared_path}/config/master.key ]")
-          upload! 'config/master.key', "#{shared_path}/config/master.key"
-        end
-      end
-    end
-  end
-
-  namespace :set_master_key do
-    before 'deploy:assets:precompile', :set_master_key_env do
-      on roles(:app) do
-        execute "export RAILS_MASTER_KEY=$(cat #{shared_path}/config/master.key)"
-      end
-    end
-  end
-
-  desc 'Restart application'
-  task :restart do
+  after :publishing, :restart do
     invoke 'puma:restart'
   end
-
-  after :publishing, :restart
-end  
+end
