@@ -3,12 +3,14 @@ lock "~> 3.19.1"
 
 set :application, "react-rails-crud-app"
 set :repo_url, "git@github.com:Mishal-Naeem/aws-deploy-app.git"
+set :user,     'deploy'
 
 set :deploy_to, '/home/deploy/myapp'
 set :puma_bind, 'tcp://0.0.0.0:9292'
+set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(/home/ads/Downloads/connecthub.pem) }
 
 append :linked_files, 'config/database.yml', 'config/master.key'
-append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
+#append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
 
 set :keep_releases, 5
 
