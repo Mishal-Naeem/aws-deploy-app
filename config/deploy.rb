@@ -27,6 +27,7 @@ namespace :puma do
     end
   end
 
+
   after 'deploy:publishing', 'puma:start'
 
   desc 'Restart Puma'

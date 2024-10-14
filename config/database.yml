@@ -20,12 +20,22 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+# production:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: my_production_db
+#   username: 'deploy'
+#   password: '1234567'
+#   pool: 5
+#   host: localhost  # Since the database is on the same EC2 instance
+#   port: 5432       # Default PostgreSQL port
+
 production:
   adapter: postgresql
   encoding: unicode
-  database: my_production_db
-  username: 'deploy'
-  password: '1234567'
+  database: prod-db
   pool: 5
-  host: localhost  # Since the database is on the same EC2 instance
-  port: 5432       # Default PostgreSQL port
+  username: postgres
+  password: '12345678M'
+  host: prod-db.cluster-cze48eeyuzt3.us-east-1.rds.amazonaws.com
+  port: 5432
